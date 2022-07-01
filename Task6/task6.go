@@ -11,14 +11,14 @@ import (
 	"time"
 )
 
-type Posts struct {
+type posts struct {
 	User  int    `json:"userId"`
 	Id    int    `json:"id"`
 	Title string `json:"title"`
 	Body  string `json:"body"`
 }
 
-type Comments struct {
+type comments struct {
 	Post  int    `json:"postId"`
 	Id    int    `json:"id"`
 	Name  string `json:"name"`
@@ -26,7 +26,7 @@ type Comments struct {
 	Body  string `json:"body"`
 }
 
-func writeCommentsToDB(c []Comments, db *sql.DB, i int) {
+func writeCommentsToDB(c []comments, db *sql.DB, i int) {
 	stmt, err := db.Prepare("INSERT INTO comments VALUES(?, ?, ?, ?, ?)")
 	_, err = stmt.Exec(c[i].Post, c[i].Id, c[i].Name, c[i].Email, c[i].Body)
 	if err != nil {
@@ -34,7 +34,7 @@ func writeCommentsToDB(c []Comments, db *sql.DB, i int) {
 	}
 }
 
-func writePostsToDB(i int, p []Posts, db *sql.DB) {
+func writePostsToDB(i int, p []posts, db *sql.DB) {
 	stmt, err := db.Prepare("INSERT INTO posts VALUES(?, ?, ?, ?)")
 	_, err = stmt.Exec(p[i].User, p[i].Id, p[i].Title, p[i].Body)
 	if err != nil {
@@ -49,7 +49,7 @@ func writePostsToDB(i int, p []Posts, db *sql.DB) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	var c []Comments
+	var c []comments
 	if err := json.Unmarshal(body, &c); err != nil {
 		log.Fatal(err)
 	}
@@ -74,7 +74,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	var s []Posts
+	var s []posts
 	if err := json.Unmarshal(body, &s); err != nil {
 		log.Fatal(err)
 	}
